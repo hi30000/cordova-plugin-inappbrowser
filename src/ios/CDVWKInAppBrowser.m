@@ -500,6 +500,8 @@ static CDVWKInAppBrowser* instance = nil;
 - (void)webView:(WKWebView *)theWebView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     
     NSURL* url = navigationAction.request.URL;
+    NSLog(@"이동경로 %@", url );
+    
     NSURL* mainDocumentURL = navigationAction.request.mainDocumentURL;
     BOOL isTopLevelNavigation = [url isEqual:mainDocumentURL];
     BOOL shouldStart = YES;
@@ -539,14 +541,35 @@ static CDVWKInAppBrowser* instance = nil;
         [self.commandDelegate sendPluginResult:pluginResult callbackId:self.callbackId];
     }
     
-    //if is an app store, tel, sms, mailto or geo link, let the system handle it, otherwise it fails to load it
-    NSArray * allowedSchemes = @[@"itms-appss", @"itms-apps", @"tel", @"sms", @"mailto", @"geo"];
-    if ([allowedSchemes containsObject:[url scheme]]) {
+    NSLog(@"스키마 => %@", [url scheme]);
+    
+    //if is an app store link, let the system handle it, otherwise it fails to load it
+    if ([[ url scheme] isEqualToString:@"itms-appss"] || [[ url scheme] isEqualToString:@"itms-apps"] ) {
+        NSLog(@"새창이동하기 => %@", [url absoluteString]);
         [theWebView stopLoading];
         [self openInSystem:url];
         shouldStart = NO;
     }
+    //결제모듈 스키마 확인
+    else if( ![[url scheme] isEqualToString:@"http"] && ![[ url scheme] isEqualToString:@"https"] && ![[ url scheme] isEqualToString:@"about"] ){
+        NSLog(@"결제창 이동하기 => %@", [url absoluteString]);
+        [theWebView stopLoading];
+        [self openInSystem:url];
+        shouldStart = NO;
+    }
+    // seman : 외부 브라우저 오픈
+    else if(
+        [[url absoluteString] rangeOfString:@"window=new"].location != NSNotFound
+    ){
+        NSLog(@"SM 조건2 : 무조건 외부창 오픈");
+        //외부창으로 오픈
+        [theWebView stopLoading];
+        [self openInSystem:url];
+        shouldStart = NO; //다음 이동 안함
+    }
+    //내부 브라우저 오픈
     else if ((self.callbackId != nil) && isTopLevelNavigation) {
+        NSLog(@"페이지이동하기 => %@", [url absoluteString]);
         // Send a loadstart event for each top-level navigation (includes redirects).
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                                       messageAsDictionary:@{@"type":@"loadstart", @"url":[url absoluteString]}];
@@ -558,17 +581,21 @@ static CDVWKInAppBrowser* instance = nil;
     if (useBeforeLoad) {
         _waitForBeforeload = YES;
     }
+     
     
     if(shouldStart){
         // Fix GH-417 & GH-424: Handle non-default target attribute
         // Based on https://stackoverflow.com/a/25713070/777265
         if (!navigationAction.targetFrame){
+            NSLog(@"SM 결과 : 1");
             [theWebView loadRequest:navigationAction.request];
             decisionHandler(WKNavigationActionPolicyCancel);
         }else{
+            NSLog(@"SM 결과 : 2");
             decisionHandler(WKNavigationActionPolicyAllow);
         }
     }else{
+        NSLog(@"SM 결과 : 3");
         decisionHandler(WKNavigationActionPolicyCancel);
     }
 }

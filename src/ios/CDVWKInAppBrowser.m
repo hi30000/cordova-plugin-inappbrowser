@@ -36,7 +36,7 @@
 
 #define    IAB_BRIDGE_NAME @"cordova_iab"
 
-#define    TOOLBAR_HEIGHT 44.0
+#define    TOOLBAR_HEIGHT 0.0 //seman : toolbar 44.0 없애기 - 개발테스트용일때만 보여지게 하기
 #define    LOCATIONBAR_HEIGHT 21.0
 #define    FOOTER_HEIGHT ((TOOLBAR_HEIGHT) + (LOCATIONBAR_HEIGHT))
 
@@ -941,7 +941,8 @@ BOOL isExiting = FALSE;
         [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
     }
     
-    self.view.backgroundColor = [UIColor clearColor];
+//    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor whiteColor]; // seman : 배경흰색지정
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
@@ -1173,24 +1174,26 @@ BOOL isExiting = FALSE;
     return (float) IsAtLeastiOSVersion(@"7.0") ? [[UIApplication sharedApplication] statusBarFrame].size.height : 0.0;
 }
 
+
+
 - (void) rePositionViews {
     CGRect viewBounds = [self.webView bounds];
     CGFloat statusBarHeight = [self getStatusBarOffset];
-    
+
     // orientation portrait or portraitUpsideDown: status bar is on the top and web view is to be aligned to the bottom of the status bar
     // orientation landscapeLeft or landscapeRight: status bar height is 0 in but lets account for it in case things ever change in the future
     viewBounds.origin.y = statusBarHeight;
-    
+
     // account for web view height portion that may have been reduced by a previous call to this method
     viewBounds.size.height = viewBounds.size.height - statusBarHeight + lastReducedStatusBarHeight;
     lastReducedStatusBarHeight = statusBarHeight;
-    
+
     if ((_browserOptions.toolbar) && ([_browserOptions.toolbarposition isEqualToString:kInAppBrowserToolbarBarPositionTop])) {
         // if we have to display the toolbar on top of the web view, we need to account for its height
         viewBounds.origin.y += TOOLBAR_HEIGHT;
         self.toolbar.frame = CGRectMake(self.toolbar.frame.origin.x, statusBarHeight, self.toolbar.frame.size.width, self.toolbar.frame.size.height);
     }
-    
+
     self.webView.frame = viewBounds;
 }
 

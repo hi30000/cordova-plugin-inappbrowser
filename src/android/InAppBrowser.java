@@ -328,7 +328,7 @@ public class InAppBrowser extends CordovaPlugin {
             dialog.show();
 
             //seman
-            ObjectAnimator.ofFloat(inAppWebView,"alpha",1f).setDuration(800).start();
+            ObjectAnimator.ofFloat(inAppWebView,"alpha",1f).setDuration(400).start();
           }
         }
       });
@@ -962,7 +962,9 @@ public class InAppBrowser extends CordovaPlugin {
 
         // WebView
         inAppWebView = new WebView(cordova.getActivity());
+        //처음에는 0으로 세팅
         inAppWebView.setAlpha(0f); //seman
+
 
         inAppWebView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         inAppWebView.setId(Integer.valueOf(6));

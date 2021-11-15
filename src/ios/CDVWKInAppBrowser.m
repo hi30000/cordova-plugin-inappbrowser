@@ -225,15 +225,19 @@ static CDVWKInAppBrowser* instance = nil;
     }
     self.inAppBrowserViewController.modalPresentationStyle = presentationStyle;
     
+    //seman - transition
     // Set Transition Style
     UIModalTransitionStyle transitionStyle = UIModalTransitionStyleCoverVertical; // default
-    if (browserOptions.transitionstyle != nil) {
-        if ([[browserOptions.transitionstyle lowercaseString] isEqualToString:@"fliphorizontal"]) {
-            transitionStyle = UIModalTransitionStyleFlipHorizontal;
-        } else if ([[browserOptions.transitionstyle lowercaseString] isEqualToString:@"crossdissolve"]) {
-            transitionStyle = UIModalTransitionStyleCrossDissolve;
-        }
-    }
+//    if (browserOptions.transitionstyle != nil) {
+//        if ([[browserOptions.transitionstyle lowercaseString] isEqualToString:@"fliphorizontal"]) {
+//            transitionStyle = UIModalTransitionStyleFlipHorizontal;
+//        } else if ([[browserOptions.transitionstyle lowercaseString] isEqualToString:@"crossdissolve"]) {
+//            transitionStyle = UIModalTransitionStyleCrossDissolve;
+//        }
+//    }
+    transitionStyle = UIModalTransitionStyleCrossDissolve;
+    //seman@ - transition
+    
     self.inAppBrowserViewController.modalTransitionStyle = transitionStyle;
     
     //prevent webView from bouncing
@@ -315,7 +319,8 @@ static CDVWKInAppBrowser* instance = nil;
             if(!initHidden || osVersion < 11){
                 [self->tmpWindow makeKeyAndVisible];
             }
-            [tmpController presentViewController:nav animated:!noAnimate completion:nil];
+//            [tmpController presentViewController:nav animated:!noAnimate completion:nil];
+            [tmpController presentViewController:nav animated:YES completion:nil];
         }
     });
 }

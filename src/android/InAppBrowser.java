@@ -19,6 +19,8 @@
 package org.apache.cordova.inappbrowser;
 
 //seman : 백버튼
+import android.animation.ObjectAnimator;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.widget.Toast;
 //seman : 백버튼@
@@ -324,6 +326,9 @@ public class InAppBrowser extends CordovaPlugin {
         public void run() {
           if (dialog != null && !cordova.getActivity().isFinishing()) {
             dialog.show();
+
+            //seman
+            ObjectAnimator.ofFloat(inAppWebView,"alpha",1f).setDuration(800).start();
           }
         }
       });
@@ -823,11 +828,14 @@ public class InAppBrowser extends CordovaPlugin {
 
         // Let's create the main dialog
         dialog = new InAppBrowserDialog(cordova.getActivity(), android.R.style.Theme_NoTitleBar);
-        dialog.getWindow().getAttributes().windowAnimations = android.R.style.Animation_Dialog;
+//        dialog.getWindow().getAttributes().windowAnimations = android.R.style.Animation_Toast;//seman 페이지전환효과
+
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if (fullscreen) {
-          dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }
+
+        //seman : remove fullscreen - show statusbar
+//        if (fullscreen) {
+//          dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        }
         dialog.setCancelable(true);
         dialog.setInAppBroswer(getInAppBrowser());
 
@@ -954,8 +962,12 @@ public class InAppBrowser extends CordovaPlugin {
 
         // WebView
         inAppWebView = new WebView(cordova.getActivity());
+        inAppWebView.setAlpha(0f); //seman
+
         inAppWebView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         inAppWebView.setId(Integer.valueOf(6));
+
+
         // File Chooser Implemented ChromeClient
         inAppWebView.setWebChromeClient(new InAppChromeClient(thatWebView) {
           public boolean onShowFileChooser (WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams)
@@ -1093,6 +1105,12 @@ public class InAppBrowser extends CordovaPlugin {
         if (openWindowHidden && dialog != null) {
           dialog.hide();
         }
+
+        // seman 라스트팡 - 여기서 translation 세팅필요!
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); //seman - no
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.getWindow().setDimAmount(0); //seman - no
+
       }
     };
     this.cordova.getActivity().runOnUiThread(runnable);

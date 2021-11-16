@@ -27,6 +27,9 @@ import org.json.JSONException;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Message;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.webkit.JsPromptResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
@@ -131,7 +134,7 @@ public class InAppChromeClient extends WebChromeClient {
             }
             else {
                 // Anything else with a gap: prefix should get this message
-                LOG.w(LOG_TAG, "InAppBrowser does not support Cordova API calls: " + url + " " + defaultValue); 
+                LOG.w(LOG_TAG, "InAppBrowser does not support Cordova API calls: " + url + " " + defaultValue);
                 result.cancel();
                 return true;
             }
@@ -172,6 +175,12 @@ public class InAppChromeClient extends WebChromeClient {
 
         final WebView newWebView = new WebView(view.getContext());
         newWebView.setWebViewClient(webViewClient);
+
+        //seman
+//        final Animation fadeIn = new AlphaAnimation(0, 1);
+//        fadeIn.setInterpolator(new DecelerateInterpolator());
+//        fadeIn.setDuration(1000);
+//        newWebView.setAnimation(fadeIn);
 
         final WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
         transport.setWebView(newWebView);

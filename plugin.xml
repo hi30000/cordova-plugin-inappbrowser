@@ -50,6 +50,7 @@
         <source-file src="src/android/InAppBrowserDialog.java" target-dir="src/org/apache/cordova/inappbrowser" />
         <source-file src="src/android/InAppChromeClient.java" target-dir="src/org/apache/cordova/inappbrowser" />
         <source-file src="src/android/PaymentScheme.java" target-dir="src/org/apache/cordova/inappbrowser" />
+        <source-file src="src/android/LoadingView.java" target-dir="src/org/apache/cordova/inappbrowser" />
 
 
         <!-- drawable src/android/resources -->

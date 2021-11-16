@@ -835,7 +835,12 @@ BOOL isExiting = FALSE;
    }
 #endif
     
-    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+//    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge ]; //seman
+    self.spinner.color = [UIColor colorWithRed:130.0/255.0 green:156.0/255.0 blue:44.0/255.0 alpha:1.0]; //seman : spinner color
+
+
+    
     self.spinner.alpha = 1.000;
     self.spinner.autoresizesSubviews = YES;
     self.spinner.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin);
@@ -1102,18 +1107,19 @@ BOOL isExiting = FALSE;
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    NSString* statusBarStylePreference = [self settingForKey:@"InAppBrowserStatusBarStyle"];
-    if (statusBarStylePreference && [statusBarStylePreference isEqualToString:@"lightcontent"]) {
-        return UIStatusBarStyleLightContent;
-    } else if (statusBarStylePreference && [statusBarStylePreference isEqualToString:@"darkcontent"]) {
-        if (@available(iOS 13.0, *)) {
-            return UIStatusBarStyleDarkContent;
-        } else {
-            return UIStatusBarStyleDefault;
-        }
-    } else {
-        return UIStatusBarStyleDefault;
-    }
+//    NSString* statusBarStylePreference = [self settingForKey:@"InAppBrowserStatusBarStyle"];
+//    if (statusBarStylePreference && [statusBarStylePreference isEqualToString:@"lightcontent"]) {
+//        return UIStatusBarStyleLightContent;
+//    } else if (statusBarStylePreference && [statusBarStylePreference isEqualToString:@"darkcontent"]) {
+//        if (@available(iOS 13.0, *)) {
+//            return UIStatusBarStyleDarkContent;
+//        } else {
+//            return UIStatusBarStyleDefault;
+//        }
+//    } else {
+//        return UIStatusBarStyleDefault;
+//    }
+    return UIStatusBarStyleDarkContent; //seman : statusbar 고정
 }
 
 - (BOOL)prefersStatusBarHidden {

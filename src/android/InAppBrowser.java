@@ -328,7 +328,7 @@ public class InAppBrowser extends CordovaPlugin {
             dialog.show();
 
             //seman
-            ObjectAnimator.ofFloat(inAppWebView,"alpha",1f).setDuration(400).start();
+            ObjectAnimator.ofFloat(inAppWebView,"alpha",1f).setDuration(1200).start();
           }
         }
       });
@@ -817,6 +817,7 @@ public class InAppBrowser extends CordovaPlugin {
 
         return _close;
       }
+      LoadingView loading;
 
       @SuppressLint("NewApi")
       public void run() {
@@ -960,6 +961,10 @@ public class InAppBrowser extends CordovaPlugin {
         footer.addView(footerClose);
 
 
+        RelativeLayout.LayoutParams loadingLayout = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+        loading = new LoadingView(cordova.getActivity(),null);
+        loading.setLayoutParams(loadingLayout);
+        loading.setVisibility(View.GONE);
         // WebView
         inAppWebView = new WebView(cordova.getActivity());
         //처음에는 0으로 세팅
@@ -991,7 +996,7 @@ public class InAppBrowser extends CordovaPlugin {
             return true;
           }
         });
-        currentClient = new InAppBrowserClient(thatWebView, edittext, beforeload);
+        currentClient = new InAppBrowserClient(thatWebView, edittext, beforeload, loading);
         inAppWebView.setWebViewClient(currentClient);
         WebSettings settings = inAppWebView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -1113,6 +1118,11 @@ public class InAppBrowser extends CordovaPlugin {
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.getWindow().setDimAmount(0); //seman - no
 
+
+
+
+        webViewLayout.addView(loading);
+        loading.bringToFront();
       }
     };
     this.cordova.getActivity().runOnUiThread(runnable);
@@ -1171,18 +1181,20 @@ public class InAppBrowser extends CordovaPlugin {
     CordovaWebView webView;
     String beforeload;
     boolean waitForBeforeload;
-
+    LoadingView loadingView;
+    boolean check = false;
     /**
      * Constructor.
      *
      * @param webView
      * @param mEditText
      */
-    public InAppBrowserClient(CordovaWebView webView, EditText mEditText, String beforeload) {
+    public InAppBrowserClient(CordovaWebView webView, EditText mEditText, String beforeload, LoadingView loadingView) {
       this.webView = webView;
       this.edittext = mEditText;
       this.beforeload = beforeload;
       this.waitForBeforeload = beforeload != null;
+      this.loadingView = loadingView;
     }
 
     //seman : 아임포트
@@ -1454,6 +1466,15 @@ public class InAppBrowser extends CordovaPlugin {
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
       Log.d("log", "스타트" + url );
 
+      if(!check){
+        check = true;
+      }
+      else{
+        loadingView.setVisibility(View.VISIBLE);
+      }
+
+
+      //로딩바
       super.onPageStarted(view, url, favicon);
       String newloc = "";
 
@@ -1502,6 +1523,7 @@ public class InAppBrowser extends CordovaPlugin {
     public void onPageFinished(WebView view, String url) {
       super.onPageFinished(view, url);
 
+      loadingView.setVisibility(View.GONE);
       // Set the namespace for postMessage()
       injectDeferredObject("window.webkit={messageHandlers:{cordova_iab:cordova_iab}}", null);
 

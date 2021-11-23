@@ -817,7 +817,10 @@ public class InAppBrowser extends CordovaPlugin {
 
         return _close;
       }
+
+      // seman : 로딩부와 한번만 fade in 효과
       LoadingView loading;
+      boolean check = false;
 
       @SuppressLint("NewApi")
       public void run() {
@@ -967,9 +970,11 @@ public class InAppBrowser extends CordovaPlugin {
         loading.setVisibility(View.GONE);
         // WebView
         inAppWebView = new WebView(cordova.getActivity());
-        //처음에는 0으로 세팅
-        inAppWebView.setAlpha(0f); //seman
-
+        //seman: 처음에는 0으로 세팅
+        if(!check){
+          check = true;
+          inAppWebView.setAlpha(0f); //seman
+        }
 
         inAppWebView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         inAppWebView.setId(Integer.valueOf(6));

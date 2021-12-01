@@ -328,7 +328,7 @@ public class InAppBrowser extends CordovaPlugin {
             dialog.show();
 
             //seman
-            ObjectAnimator.ofFloat(inAppWebView, "alpha", 1f).setDuration(1200).start();
+            ObjectAnimator.ofFloat(inAppWebView,"alpha",1f).setDuration(1200).start();
           }
         }
       });
@@ -817,8 +817,6 @@ public class InAppBrowser extends CordovaPlugin {
 
         return _close;
       }
-
-      // seman : 로딩부와 한번만 fade in 효과
       LoadingView loading;
 
       @SuppressLint("NewApi")
@@ -969,7 +967,7 @@ public class InAppBrowser extends CordovaPlugin {
         loading.setVisibility(View.GONE);
         // WebView
         inAppWebView = new WebView(cordova.getActivity());
-        //seman: 처음에는 0으로 세팅
+        //처음에는 0으로 세팅
         inAppWebView.setAlpha(0f); //seman
 
 
@@ -1472,7 +1470,8 @@ public class InAppBrowser extends CordovaPlugin {
         check = true;
       }
       else{
-        loadingView.setVisibility(View.VISIBLE);
+        //loadingView.setVisibility(View.VISIBLE);
+        loadingView.setVisibility(View.GONE);
       }
 
 

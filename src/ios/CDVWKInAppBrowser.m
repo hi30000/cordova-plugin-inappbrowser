@@ -950,7 +950,7 @@ BOOL isExiting = FALSE;
     self.view.backgroundColor = [UIColor whiteColor]; // seman : 배경흰색지정
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
-    [self.view addSubview:self.spinner];
+//    [self.view addSubview:self.spinner]; //seman : 로딩바 없앰
 }
 
 - (id)settingForKey:(NSString*)key

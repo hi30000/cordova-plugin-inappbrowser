@@ -1001,7 +1001,9 @@ public class InAppBrowser extends CordovaPlugin {
         WebSettings settings = inAppWebView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
-        settings.setBuiltInZoomControls(showZoomControls);
+        //settings.setBuiltInZoomControls(showZoomControls);
+        settings.setBuiltInZoomControls(false); //seman : zoom 막기
+        settings.setTextZoom(100); // seman : text 크 고정
         settings.setPluginState(android.webkit.WebSettings.PluginState.ON);
 
 

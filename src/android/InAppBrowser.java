@@ -20,6 +20,7 @@ package org.apache.cordova.inappbrowser;
 
 //seman : 백버튼
 import android.animation.ObjectAnimator;
+import android.app.AlertDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.widget.Toast;
@@ -174,13 +175,25 @@ public class InAppBrowser extends CordovaPlugin {
       this.callbackContext = callbackContext;
       final String url = args.getString(0);
       String t = args.optString(1);
+
+//      AlertDialog alertDialog = new AlertDialog.Builder(cordova.getActivity() ).create();
+//      alertDialog.setTitle("Target t");
+//      alertDialog.setMessage(t);
+//      alertDialog.show();
+
+
       if (t == null || t.equals("") || t.equals(NULL)) {
         t = SELF;
       }
       final String target = t;
       final HashMap<String, String> features = parseFeature(args.optString(2));
 
-      LOG.d(LOG_TAG, "target = " + target);
+      Log.d("log", "target = " + target);
+//      AlertDialog alertDialog2 = new AlertDialog.Builder(cordova.getActivity() ).create();
+//      alertDialog2.setTitle("Target target");
+//      alertDialog2.setMessage(target);
+//      alertDialog2.show();
+
 
       this.cordova.getActivity().runOnUiThread(new Runnable() {
         @Override
@@ -252,7 +265,7 @@ public class InAppBrowser extends CordovaPlugin {
             LOG.d(LOG_TAG, "in system");
             result = openExternal(url);
           }
-          // BLANK - or anything else
+          //  blank or anything else
           else {
             LOG.d(LOG_TAG, "in blank");
             result = showWebPage(url, features);
@@ -1493,9 +1506,6 @@ public class InAppBrowser extends CordovaPlugin {
       else if (url.startsWith("http:") || url.startsWith("https:") || url.startsWith("file:")) {
         newloc = url;
 
-//        if( url.indexOf("window=new") > -1 ){
-//          newloc += "?window=new";
-//        }
         Log.d("log", "스타트1" + newloc );
       }
       else

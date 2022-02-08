@@ -772,6 +772,10 @@ BOOL isExiting = FALSE;
         ) {
         userAgent = [NSString stringWithFormat:@"%@ %@", userAgent, [self settingForKey:@"AppendUserAgent"]];
     }
+    //seman : UA 추가
+   userAgent = [NSString stringWithFormat:@"%@ %@", userAgent, @"iPhone,capacitor,cordova"];
+   //seman : UA 추가@
+       
     configuration.applicationNameForUserAgent = userAgent;
     configuration.userContentController = userContentController;
 #if __has_include(<Cordova/CDVWebViewProcessPoolFactory.h>)
@@ -950,7 +954,7 @@ BOOL isExiting = FALSE;
     self.view.backgroundColor = [UIColor whiteColor]; // seman : 배경흰색지정
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
-//    [self.view addSubview:self.spinner]; //seman : 로딩바 없앰
+    [self.view addSubview:self.spinner];
 }
 
 - (id)settingForKey:(NSString*)key

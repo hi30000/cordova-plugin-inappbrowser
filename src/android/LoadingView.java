@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import capacitor.android.plugins.R;
+// import capacitor.android.plugins.R;
 
 
 public class LoadingView extends FrameLayout {
@@ -19,7 +19,7 @@ public class LoadingView extends FrameLayout {
 
     String service = Context.LAYOUT_INFLATER_SERVICE;
     LayoutInflater li = (LayoutInflater) context.getSystemService(service);
-    li.inflate(R.layout.view_loading, this, true);
+    // li.inflate(R.layout.view_loading, this, true);
   }
 }
 

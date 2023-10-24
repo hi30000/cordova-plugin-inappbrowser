@@ -21,7 +21,9 @@ package org.apache.cordova.inappbrowser;
 //seman : 백버튼
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 //seman : 백버튼@
@@ -161,6 +163,8 @@ public class InAppBrowser extends CordovaPlugin {
   private boolean fullscreen = true;
   private String[] allowedSchemes;
   private InAppBrowserClient currentClient;
+
+  private boolean isFirst = true;
 
   /**
    * Executes the request and returns PluginResult.
@@ -341,7 +345,7 @@ public class InAppBrowser extends CordovaPlugin {
             dialog.show();
 
             //seman
-            ObjectAnimator.ofFloat(inAppWebView,"alpha",1f).setDuration(1200).start();
+            ObjectAnimator.ofFloat(inAppWebView,"alpha",1f).setDuration(300).start(); //1200
           }
         }
       });
@@ -725,7 +729,6 @@ public class InAppBrowser extends CordovaPlugin {
         }
       }
 
-
       String shouldPause = features.get(SHOULD_PAUSE);
       if (shouldPause != null) {
         shouldPauseInAppBrowser = shouldPause.equals("yes") ? true : false;
@@ -1067,6 +1070,8 @@ public class InAppBrowser extends CordovaPlugin {
         // Enable Thirdparty Cookies
         CookieManager.getInstance().setAcceptThirdPartyCookies(inAppWebView,true);
 
+
+
         inAppWebView.loadUrl(url);
         inAppWebView.setId(Integer.valueOf(6));
         inAppWebView.getSettings().setLoadWithOverviewMode(true);
@@ -1080,7 +1085,6 @@ public class InAppBrowser extends CordovaPlugin {
         //seman : 캐시 제거
         inAppWebView.clearCache(true);
         //seman : 캐시 제거@
-
 
         // seman: http 이미지도 나오게 하기
         if(Build.VERSION.SDK_INT >= 21) {
@@ -1470,6 +1474,7 @@ public class InAppBrowser extends CordovaPlugin {
       return response;
     }
 
+
     /*
      * onPageStarted fires the LOAD_START_EVENT
      *
@@ -1480,6 +1485,23 @@ public class InAppBrowser extends CordovaPlugin {
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
       Log.d("log", "스타트" + url );
+
+      //seman
+      SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(inAppWebView.getContext());
+
+      // 설정 불러오기
+      String value = preferences.getString("key", "N");
+      if( value.equals("N") ) {
+        inAppWebView.evaluateJavascript("try{window.localStorage.clear();}catch(e){alert(e.message);}", null);
+
+        // 설정 저장
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("key", "value");
+        editor.apply();
+      }
+      //seman@
+
+
 
       if(!check){
         check = true;
